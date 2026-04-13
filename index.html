@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Income Tax Calculator — India</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500&family=Outfit:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <h1>Income Tax Calculator</h1>
+    <p>Old Regime Calculation &middot; India</p>
+    <div class="regime-note" id="headerNote">FY 2026-27 &middot; AY 2027-28</div>
+</header>
+
+<main>
+    <div class="card">
+        <div class="card-header">
+            <h2>Income Details</h2>
+            <div class="fy-select-wrap">
+                <label for="fySelect">Financial Year</label>
+                <select class="form-group" id="fySelect">
+                    <option selected value="2026-27">2026-27</option>
+                    <option value="2025-26">2025-26</option>
+                </select>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="income-form">
+                <div class="form-group">
+                    <label for="inBasic">Basic Salary (Annual)</label>
+                    <input id="inBasic" min="0" placeholder="850000" step="10000" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="inHRA">HRA (Annual)</label>
+                    <input id="inHRA" min="0" placeholder="350000" step="10000" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="inOther">Other Flexible (Annual)</label>
+                    <input id="inOther" min="0" placeholder="970000" step="10000" type="number">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="regime-grid">
+        <div class="regime-card old">
+            <div class="regime-header">
+                <h3>Old Tax Regime</h3>
+            </div>
+            <div class="regime-body">
+                <div class="comp-row negative">
+                    <span class="comp-label">Standard Deduction</span>
+                    <span class="comp-value" id="old-std-ded">₹50,000</span>
+                </div>
+                <div class="comp-row total-row">
+                    <span class="comp-label">Net Taxable Income</span>
+                    <span class="comp-value" id="old-taxable"></span>
+                </div>
+                <div class="section-label">Tax Computation</div>
+                <table class="slab-table">
+                    <thead>
+                    <tr>
+                        <th>Income Slab</th>
+                        <th>Rate</th>
+                        <th>Tax</th>
+                    </tr>
+                    </thead>
+                    <tbody id="old-slab-body"></tbody>
+                </table>
+                <div class="comp-row total-row">
+                    <span class="comp-label">Total Tax Payable</span>
+                    <span class="comp-value" id="old-total-tax"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script defer src="script.js"></script>
+</body>
+</html>
