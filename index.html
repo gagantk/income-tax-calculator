@@ -44,6 +44,24 @@
                     <label for="inOther">Other Flexible (Annual)</label>
                     <input id="inOther" min="0" placeholder="970000" step="10000" type="number">
                 </div>
+                <div class="form-group">
+                    <label for="inCity">City</label>
+                    <select id="inCity">
+                        <option selected value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Other">Other (Non-Metro)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="inRent">Monthly Rent Paid</label>
+                    <input id="inRent" min="0" placeholder="0" step="1000" type="number">
+                </div>
             </div>
         </div>
     </div>
@@ -54,6 +72,10 @@
                 <h3>Old Tax Regime</h3>
             </div>
             <div class="regime-body">
+                <div class="comp-row negative">
+                    <span class="comp-label">HRA Exemption</span>
+                    <span class="comp-value" id="old-hra-exempt">₹0</span>
+                </div>
                 <div class="comp-row negative">
                     <span class="comp-label">Standard Deduction</span>
                     <span class="comp-value" id="old-std-ded">₹50,000</span>

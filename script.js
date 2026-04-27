@@ -1,6 +1,7 @@
 const FY_DATA = {
     '2025-26': {
         ay: '2026-27',
+        metroCities: ['Delhi', 'Mumbai', 'Kolkata', 'Chennai'],
         oldSlabs: [
             {limit: 250000, rate: 0}, {limit: 500000, rate: 0.05}, {limit: 1000000, rate: 0.20}, {
                 limit: Infinity,
@@ -11,6 +12,7 @@ const FY_DATA = {
     },
     '2026-27': {
         ay: '2027-28',
+        metroCities: ['Delhi', 'Mumbai', 'Kolkata', 'Chennai', 'Bangalore', 'Hyderabad', 'Pune', 'Ahmedabad'],
         oldSlabs: [
             {limit: 250000, rate: 0}, {limit: 500000, rate: 0.05}, {limit: 1000000, rate: 0.20}, {
                 limit: Infinity,
@@ -67,14 +69,34 @@ function calculate() {
     const cfg = FY_DATA[fy];
     document.getElementById('headerNote').textContent = `FY ${fy} · AY ${cfg.ay}`;
 
+    // Read Inputs
     const basic = readNum('inBasic');
     const hra = readNum('inHRA');
     const otherFlex = readNum('inOther');
+    const monthlyRent = readNum('inRent');
+    const city = document.getElementById('inCity').value;
+
     const gross = basic + hra + otherFlex;
 
-    const oldTaxable = Math.max(0, gross - cfg.oldStdDed);
+    // HRA Calculation
+    const isMetro = cfg.metroCities.includes(city);
+    const annualRent = monthlyRent * 12;
+    let hraExempt = 0;
+
+    if (annualRent > 0 && basic > 0) {
+        const cityPct = isMetro ? 0.5 : 0.4;
+        const hraComp1 = hra;
+        const hraComp2 = basic * cityPct;
+        const hraComp3 = annualRent - (basic * 0.1);
+        hraExempt = Math.max(0, Math.min(hraComp1, hraComp2, hraComp3));
+    }
+
+    // Taxable Income Calculation
+    const oldTaxable = Math.max(0, gross - hraExempt - cfg.oldStdDed);
     const oldSlab = computeSlabTax(oldTaxable, cfg.oldSlabs);
 
+    // Update DOM
+    document.getElementById('old-hra-exempt').textContent = fmt(hraExempt);
     document.getElementById('old-std-ded').textContent = fmt(cfg.oldStdDed);
     document.getElementById('old-taxable').textContent = fmt(oldTaxable);
     renderSlabs('old-slab-body', oldSlab.breakdown);
