@@ -1,0 +1,74 @@
+# IDE / Editor
+.idea/
+.vscode/
+*.iml
+*.sublime-workspace
+*.sublime-project
+.project
+.settings/
+nbproject/
+
+# Claude Code local state
+.claude/
+
+# OS — Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# OS — macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# OS — Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Editor backups / swap
+*.swp
+*.swo
+*.bak
+*.tmp
+*~.nib
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Node (in case tooling is added later)
+node_modules/
+.npm/
+.yarn/
+.pnp.*
+
+# Build output
+dist/
+build/
+out/
+
+# Coverage / test artifacts
+coverage/
+.nyc_output/
+
+# Exported user data (from the calculator's export feature)
+tax-calc-*.json
