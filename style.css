@@ -15,6 +15,9 @@
     --old-accent: #92400e;
     --old-bg: #fef8ee;
     --old-border: #f5d9a8;
+    --new-accent: #1e40af;
+    --new-bg: #eff4ff;
+    --new-border: #a8c4f5;
     --green: #15803d;
     --input-bg: #f8f7f4;
     --input-focus-ring: rgba(30, 64, 175, 0.1);
@@ -102,6 +105,18 @@ main {
     gap: 0.9rem 1.25rem;
 }
 
+@media (max-width: 640px) {
+    .income-form {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 440px) {
+    .income-form {
+        grid-template-columns: 1fr;
+    }
+}
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -132,10 +147,16 @@ main {
 
 .regime-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    max-width: 600px;
+    grid-template-columns: 1fr 1fr;
     margin: 0 auto 1.5rem auto;
     gap: 1.5rem;
+    align-items: start;
+}
+
+@media (max-width: 840px) {
+    .regime-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .regime-card {
@@ -154,6 +175,17 @@ main {
     background: var(--old-bg);
     border-bottom: 2px solid var(--old-border);
     color: var(--old-accent);
+}
+
+.regime-card.new .regime-header {
+    background: var(--new-bg);
+    border-bottom: 2px solid var(--new-border);
+    color: var(--new-accent);
+}
+
+.comp-row.na .comp-value {
+    color: var(--text-light);
+    font-style: italic;
 }
 
 .regime-body {

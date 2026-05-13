@@ -99,9 +99,64 @@
                     <span class="comp-label">Rebate u/s 87A</span>
                     <span class="comp-value" id="old-rebate"></span>
                 </div>
+                <div class="comp-row" id="old-surcharge-row" style="margin-top:0.4rem;">
+                    <span class="comp-label">Surcharge</span>
+                    <span class="comp-value" id="old-surcharge">₹0</span>
+                </div>
+                <div class="comp-row">
+                    <span class="comp-label">Health &amp; Education Cess (4%)</span>
+                    <span class="comp-value" id="old-cess">₹0</span>
+                </div>
                 <div class="comp-row total-row">
                     <span class="comp-label">Total Tax Payable</span>
                     <span class="comp-value" id="old-total-tax"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="regime-card new">
+            <div class="regime-header">
+                <h3>New Tax Regime</h3>
+            </div>
+            <div class="regime-body">
+                <div class="comp-row na">
+                    <span class="comp-label">HRA Exemption</span>
+                    <span class="comp-value">N/A</span>
+                </div>
+                <div class="comp-row negative">
+                    <span class="comp-label">Standard Deduction</span>
+                    <span class="comp-value" id="new-std-ded">₹75,000</span>
+                </div>
+                <div class="comp-row total-row">
+                    <span class="comp-label">Net Taxable Income</span>
+                    <span class="comp-value" id="new-taxable"></span>
+                </div>
+                <div class="section-label">Tax Computation</div>
+                <table class="slab-table">
+                    <thead>
+                    <tr>
+                        <th>Income Slab</th>
+                        <th>Rate</th>
+                        <th>Tax</th>
+                    </tr>
+                    </thead>
+                    <tbody id="new-slab-body"></tbody>
+                </table>
+                <div class="comp-row negative" id="new-rebate-row" style="display:none;">
+                    <span class="comp-label">Rebate u/s 87A</span>
+                    <span class="comp-value" id="new-rebate"></span>
+                </div>
+                <div class="comp-row" id="new-surcharge-row" style="margin-top:0.4rem;">
+                    <span class="comp-label">Surcharge</span>
+                    <span class="comp-value" id="new-surcharge">₹0</span>
+                </div>
+                <div class="comp-row">
+                    <span class="comp-label">Health &amp; Education Cess (4%)</span>
+                    <span class="comp-value" id="new-cess">₹0</span>
+                </div>
+                <div class="comp-row total-row">
+                    <span class="comp-label">Total Tax Payable</span>
+                    <span class="comp-value" id="new-total-tax"></span>
                 </div>
             </div>
         </div>

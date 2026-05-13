@@ -10,7 +10,15 @@ const FY_DATA = {
         ],
         oldStdDed: 50000,
         oldRebateLimit: 500000,
-        oldRebateMax: 12500
+        oldRebateMax: 12500,
+        newSlabs: [
+            {limit: 400000, rate: 0}, {limit: 800000, rate: 0.05}, {limit: 1200000, rate: 0.10},
+            {limit: 1600000, rate: 0.15}, {limit: 2000000, rate: 0.20}, {limit: 2400000, rate: 0.25},
+            {limit: Infinity, rate: 0.30}
+        ],
+        newStdDed: 75000,
+        newRebateLimit: 1200000,
+        newRebateMax: 60000
     },
     '2026-27': {
         ay: '2027-28',
@@ -23,7 +31,15 @@ const FY_DATA = {
         ],
         oldStdDed: 50000,
         oldRebateLimit: 500000,
-        oldRebateMax: 12500
+        oldRebateMax: 12500,
+        newSlabs: [
+            {limit: 400000, rate: 0}, {limit: 800000, rate: 0.05}, {limit: 1200000, rate: 0.10},
+            {limit: 1600000, rate: 0.15}, {limit: 2000000, rate: 0.20}, {limit: 2400000, rate: 0.25},
+            {limit: Infinity, rate: 0.30}
+        ],
+        newStdDed: 75000,
+        newRebateLimit: 1200000,
+        newRebateMax: 60000
     }
 };
 
@@ -55,6 +71,46 @@ function computeSlabTax(income, slabs) {
         if (remaining <= 0) break;
     }
     return {totalTax, breakdown};
+}
+
+function computeSurcharge(taxableIncome, tax, slabs, regime) {
+    if (taxableIncome <= 5000000) return 0;
+    let rate = 0;
+    if (taxableIncome <= 10000000) rate = 0.10;
+    else if (taxableIncome <= 20000000) rate = 0.15;
+    else if (taxableIncome <= 50000000) rate = 0.25;
+    else rate = regime === 'new' ? 0.25 : 0.37;
+
+    let surcharge = tax * rate;
+    const thresholds = [{limit: 5000000, prevRate: 0}, {limit: 10000000, prevRate: 0.10}, {
+        limit: 20000000,
+        prevRate: 0.15
+    }, {limit: 50000000, prevRate: 0.25}];
+    for (const t of thresholds) {
+        if (taxableIncome > t.limit && taxableIncome <= t.limit * 1.2) {
+            const taxAtT = computeSlabTax(t.limit, slabs).totalTax;
+            const scAtT = taxAtT * t.prevRate;
+            const relief = (tax + surcharge) - (taxAtT + scAtT + (taxableIncome - t.limit));
+            if (relief > 0) surcharge = Math.max(0, surcharge - relief);
+        }
+    }
+    return surcharge;
+}
+
+function computeRebate(taxableIncome, tax, cfg, regime) {
+    if (regime === 'new') {
+        if (taxableIncome <= cfg.newRebateLimit) return Math.min(tax, cfg.newRebateMax);
+        const marginal = taxableIncome - cfg.newRebateLimit;
+        const taxAtLimit = computeSlabTax(cfg.newRebateLimit, cfg.newSlabs).totalTax;
+        const rebateAtLimit = Math.min(taxAtLimit, cfg.newRebateMax);
+        const taxPayableAtLimit = taxAtLimit - rebateAtLimit;
+        if (tax > taxPayableAtLimit + marginal) return tax - (taxPayableAtLimit + marginal);
+        return 0;
+    }
+    if (regime === 'old' && taxableIncome <= cfg.oldRebateLimit) {
+        return Math.min(tax, cfg.oldRebateMax);
+    }
+    return 0;
 }
 
 function renderSlabs(tbodyId, breakdown) {
@@ -95,26 +151,62 @@ function calculate() {
         hraExempt = Math.max(0, Math.min(hraComp1, hraComp2, hraComp3));
     }
 
-    // Taxable Income Calculation
+    // Old Regime
     const oldTaxable = Math.max(0, gross - hraExempt - cfg.oldStdDed);
     const oldSlab = computeSlabTax(oldTaxable, cfg.oldSlabs);
-    const oldRebate = oldTaxable <= cfg.oldRebateLimit ? Math.min(oldSlab.totalTax, cfg.oldRebateMax) : 0;
-    const oldTotalTax = oldSlab.totalTax - oldRebate;
+    const oldRebate = computeRebate(oldTaxable, oldSlab.totalTax, cfg, 'old');
+    const oldTaxAfterRebate = oldSlab.totalTax - oldRebate;
+    const oldSurcharge = computeSurcharge(oldTaxable, oldTaxAfterRebate, cfg.oldSlabs, 'old');
+    const oldCess = (oldTaxAfterRebate + oldSurcharge) * 0.04;
+    const oldTotalTax = oldTaxAfterRebate + oldSurcharge + oldCess;
 
-    // Update DOM
+    // New Regime
+    const newTaxable = Math.max(0, gross - cfg.newStdDed);
+    const newSlab = computeSlabTax(newTaxable, cfg.newSlabs);
+    const newRebate = computeRebate(newTaxable, newSlab.totalTax, cfg, 'new');
+    const newTaxAfterRebate = newSlab.totalTax - newRebate;
+    const newSurcharge = computeSurcharge(newTaxable, newTaxAfterRebate, cfg.newSlabs, 'new');
+    const newCess = (newTaxAfterRebate + newSurcharge) * 0.04;
+    const newTotalTax = newTaxAfterRebate + newSurcharge + newCess;
+
+    // Update DOM — Old
     document.getElementById('old-hra-exempt').textContent = fmt(hraExempt);
     document.getElementById('old-std-ded').textContent = fmt(cfg.oldStdDed);
     document.getElementById('old-taxable').textContent = fmt(oldTaxable);
     renderSlabs('old-slab-body', oldSlab.breakdown);
 
     const oldRebateRow = document.getElementById('old-rebate-row');
+    const oldSurchargeRow = document.getElementById('old-surcharge-row');
     if (oldRebate > 0) {
         oldRebateRow.style.display = '';
         document.getElementById('old-rebate').textContent = fmt(oldRebate);
+        oldSurchargeRow.style.marginTop = '0';
     } else {
         oldRebateRow.style.display = 'none';
+        oldSurchargeRow.style.marginTop = '0.4rem';
     }
+    document.getElementById('old-surcharge').textContent = fmt(oldSurcharge);
+    document.getElementById('old-cess').textContent = fmt(oldCess);
     document.getElementById('old-total-tax').textContent = fmt(oldTotalTax);
+
+    // Update DOM — New
+    document.getElementById('new-std-ded').textContent = fmt(cfg.newStdDed);
+    document.getElementById('new-taxable').textContent = fmt(newTaxable);
+    renderSlabs('new-slab-body', newSlab.breakdown);
+
+    const newRebateRow = document.getElementById('new-rebate-row');
+    const newSurchargeRow = document.getElementById('new-surcharge-row');
+    if (newRebate > 0) {
+        newRebateRow.style.display = '';
+        document.getElementById('new-rebate').textContent = fmt(newRebate);
+        newSurchargeRow.style.marginTop = '0';
+    } else {
+        newRebateRow.style.display = 'none';
+        newSurchargeRow.style.marginTop = '0.4rem';
+    }
+    document.getElementById('new-surcharge').textContent = fmt(newSurcharge);
+    document.getElementById('new-cess').textContent = fmt(newCess);
+    document.getElementById('new-total-tax').textContent = fmt(newTotalTax);
 }
 
 document.querySelectorAll('input, select').forEach(el => {
