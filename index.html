@@ -39,7 +39,7 @@
         </button>
     </div>
     <h1>Income Tax Calculator</h1>
-    <p>Old Regime Calculation &middot; India</p>
+    <p>Old &amp; New Regime Comparison &middot; India</p>
     <div class="regime-note" id="headerNote">FY 2026-27 &middot; AY 2027-28</div>
 </header>
 
@@ -183,6 +183,26 @@
                     <span class="comp-label">Total Tax Payable</span>
                     <span class="comp-value" id="new-total-tax"></span>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="verdict-card">
+        <div class="verdict-header" id="verdict-header">
+            <div class="verdict-label">Recommended Regime</div>
+            <div class="verdict-text" id="verdict-text"></div>
+            <div class="verdict-amount" id="verdict-amount"></div>
+        </div>
+        <div class="verdict-body">
+            <div class="verdict-stat">
+                <div class="stat-label">Old Regime Tax</div>
+                <div class="stat-value" id="v-old-tax" style="color: var(--old-accent);"></div>
+                <div class="stat-sub" id="v-old-eff"></div>
+            </div>
+            <div class="verdict-stat">
+                <div class="stat-label">New Regime Tax</div>
+                <div class="stat-value" id="v-new-tax" style="color: var(--new-accent);"></div>
+                <div class="stat-sub" id="v-new-eff"></div>
             </div>
         </div>
     </div>

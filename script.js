@@ -207,6 +207,29 @@ function calculate() {
     document.getElementById('new-surcharge').textContent = fmt(newSurcharge);
     document.getElementById('new-cess').textContent = fmt(newCess);
     document.getElementById('new-total-tax').textContent = fmt(newTotalTax);
+
+    // Verdict
+    const diff = Math.abs(oldTotalTax - newTotalTax);
+    const vh = document.getElementById('verdict-header');
+    const vt = document.getElementById('verdict-text');
+    const va = document.getElementById('verdict-amount');
+    if (newTotalTax < oldTotalTax) {
+        vh.className = 'verdict-header new-wins';
+        vt.textContent = 'New Regime saves you';
+        va.textContent = fmt(diff);
+    } else if (oldTotalTax < newTotalTax) {
+        vh.className = 'verdict-header old-wins';
+        vt.textContent = 'Old Regime saves you';
+        va.textContent = fmt(diff);
+    } else {
+        vh.className = 'verdict-header new-wins';
+        vt.textContent = 'Both regimes are equal';
+        va.textContent = '';
+    }
+    document.getElementById('v-old-tax').textContent = fmt(oldTotalTax);
+    document.getElementById('v-old-eff').textContent = 'Effective: ' + (gross > 0 ? (oldTotalTax / gross * 100).toFixed(2) : '0') + '%';
+    document.getElementById('v-new-tax').textContent = fmt(newTotalTax);
+    document.getElementById('v-new-eff').textContent = 'Effective: ' + (gross > 0 ? (newTotalTax / gross * 100).toFixed(2) : '0') + '%';
 }
 
 document.querySelectorAll('input, select').forEach(el => {
