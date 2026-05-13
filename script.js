@@ -215,3 +215,14 @@ document.querySelectorAll('input, select').forEach(el => {
 });
 
 calculate();
+
+document.getElementById('themeToggle').addEventListener('click', function () {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('tax-calc-theme', 'light');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('tax-calc-theme', 'dark');
+    }
+});
