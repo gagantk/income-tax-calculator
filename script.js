@@ -8,7 +8,9 @@ const FY_DATA = {
                 rate: 0.30
             }
         ],
-        oldStdDed: 50000
+        oldStdDed: 50000,
+        oldRebateLimit: 500000,
+        oldRebateMax: 12500
     },
     '2026-27': {
         ay: '2027-28',
@@ -19,7 +21,9 @@ const FY_DATA = {
                 rate: 0.30
             }
         ],
-        oldStdDed: 50000
+        oldStdDed: 50000,
+        oldRebateLimit: 500000,
+        oldRebateMax: 12500
     }
 };
 
@@ -94,13 +98,23 @@ function calculate() {
     // Taxable Income Calculation
     const oldTaxable = Math.max(0, gross - hraExempt - cfg.oldStdDed);
     const oldSlab = computeSlabTax(oldTaxable, cfg.oldSlabs);
+    const oldRebate = oldTaxable <= cfg.oldRebateLimit ? Math.min(oldSlab.totalTax, cfg.oldRebateMax) : 0;
+    const oldTotalTax = oldSlab.totalTax - oldRebate;
 
     // Update DOM
     document.getElementById('old-hra-exempt').textContent = fmt(hraExempt);
     document.getElementById('old-std-ded').textContent = fmt(cfg.oldStdDed);
     document.getElementById('old-taxable').textContent = fmt(oldTaxable);
     renderSlabs('old-slab-body', oldSlab.breakdown);
-    document.getElementById('old-total-tax').textContent = fmt(oldSlab.totalTax);
+
+    const oldRebateRow = document.getElementById('old-rebate-row');
+    if (oldRebate > 0) {
+        oldRebateRow.style.display = '';
+        document.getElementById('old-rebate').textContent = fmt(oldRebate);
+    } else {
+        oldRebateRow.style.display = 'none';
+    }
+    document.getElementById('old-total-tax').textContent = fmt(oldTotalTax);
 }
 
 document.querySelectorAll('input, select').forEach(el => {
