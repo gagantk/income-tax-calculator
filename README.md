@@ -6,7 +6,7 @@ A fast, dependency-free interactive web application to compute Indian income tax
 
 ## 🚀 Overview
 
-This project provides an easy-to-use interface to estimate income tax based on the Income Tax Act provisions. Currently, the calculator focuses on the **Old Tax Regime**, allowing users to input their salary components and instantly see a breakdown of their tax slabs and total payable tax.
+This project provides an easy-to-use interface to estimate income tax based on the Income Tax Act provisions. Users input their salary components and instantly see a side-by-side breakdown of tax slabs and total payable tax under both the Old and New Tax Regimes.
 
 ## 🛠 Architecture
 
@@ -16,22 +16,22 @@ This project is built from the ground up using strictly vanilla web technologies
 * **CSS3:** Custom responsive styling using CSS variables for easy theming.
 * **Vanilla JavaScript:** Core computation engine handling tax slabs and DOM updates.
 
-## 🗺 Roadmap
+## ✨ Features
 
-This repository is actively being developed and expanded.
-
-**Current Features:**
 * Core salary component inputs (Basic, HRA, Other Flexible)
 * **Exemption Engine:** Dynamic HRA computation based on rent and Metro/Non-Metro classification
 * Standard deduction computation
-* Slab-wise tax breakdown for the Old Tax Regime
+* Slab-wise tax breakdown for both regimes
+* **Old & New Tax Regime:** Side-by-side comparison with a verdict highlighting which regime saves more money
+* **Chapter VI-A Deductions:** 80C, 80D (Self & Parents), 80CCD(1B) NPS, 80E education loan interest and 80EEA home loan interest, applied to the Old Regime
+* Sec 24(b) home loan interest deduction (max ₹2L), applied to the Old Regime
+* Professional Tax deduction (max ₹2,500), applied to the Old Regime
+* Section 87A rebate (with marginal relief under the New Regime)
+* Surcharge computation with marginal relief
+* Health & Education Cess (4%)
+* **Theming:** Persistent Dark/Light mode toggle with system preference detection
 * Support for Financial Years 2025-26 and 2026-27
-
-**Upcoming Features:**
-* **New Tax Regime:** Side-by-side comparison highlighting which regime saves more money.
-* **Chapter VI-A Deductions:** Support for 80C, 80D, and advanced deductions (80CCD, 80EEA, etc.).
-* **Theming:** Persistent Dark/Light mode toggle.
-* **Take-Home Analysis:** Annual and monthly net take-home pay comparisons.
+* Responsive layout for desktop and mobile
 
 ## 💻 Local Setup
 

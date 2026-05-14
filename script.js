@@ -47,8 +47,9 @@ function fmt(n) {
     return '₹' + new Intl.NumberFormat('en-IN').format(Math.round(n));
 }
 
-function readNum(id) {
-    return parseFloat(document.getElementById(id).value) || 0;
+function readNum(id, max) {
+    const v = parseFloat(document.getElementById(id).value) || 0;
+    return max != null ? Math.min(v, max) : v;
 }
 
 function computeSlabTax(income, slabs) {
@@ -136,6 +137,16 @@ function calculate() {
     const monthlyRent = readNum('inRent');
     const city = document.getElementById('inCity').value;
 
+    const sec80C = readNum('in80C', 150000);
+    const sec80Dself = readNum('in80Dself', 25000);
+    const sec80Dparents = readNum('in80Dparents', 25000);
+    const sec80CCD = readNum('in80CCD', 50000);
+    const sec80E = readNum('in80E');
+    const sec80EEA = readNum('in80EEA', 150000);
+    const oldViaTotal = sec80C + sec80Dself + sec80Dparents + sec80CCD + sec80E + sec80EEA;
+    const sec24b = readNum('in24b', 200000);
+    const profTax = readNum('inProfTax', 2500);
+
     const gross = basic + hra + otherFlex;
 
     // HRA Calculation
@@ -152,7 +163,7 @@ function calculate() {
     }
 
     // Old Regime
-    const oldTaxable = Math.max(0, gross - hraExempt - cfg.oldStdDed);
+    const oldTaxable = Math.max(0, gross - hraExempt - cfg.oldStdDed - profTax - sec24b - oldViaTotal);
     const oldSlab = computeSlabTax(oldTaxable, cfg.oldSlabs);
     const oldRebate = computeRebate(oldTaxable, oldSlab.totalTax, cfg, 'old');
     const oldTaxAfterRebate = oldSlab.totalTax - oldRebate;
@@ -172,6 +183,9 @@ function calculate() {
     // Update DOM — Old
     document.getElementById('old-hra-exempt').textContent = fmt(hraExempt);
     document.getElementById('old-std-ded').textContent = fmt(cfg.oldStdDed);
+    document.getElementById('old-prof-tax').textContent = fmt(profTax);
+    document.getElementById('old-24b').textContent = fmt(sec24b);
+    document.getElementById('old-via').textContent = fmt(oldViaTotal);
     document.getElementById('old-taxable').textContent = fmt(oldTaxable);
     renderSlabs('old-slab-body', oldSlab.breakdown);
 

@@ -88,6 +88,44 @@
                     <input id="inRent" min="0" placeholder="0" step="1000" type="number">
                 </div>
             </div>
+            <div class="section-label">Chapter VI-A Deductions <span>(Old Regime only)</span></div>
+            <div class="income-form">
+                <div class="form-group">
+                    <label for="in80C">80C — EPF, PPF, ELSS &middot; max ₹1.5L</label>
+                    <input id="in80C" max="150000" min="0" placeholder="0" step="10000" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="in80Dself">80D — Self &amp; Family &middot; max ₹25K</label>
+                    <input id="in80Dself" max="25000" min="0" placeholder="0" step="5000" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="in80Dparents">80D — Parents &middot; max ₹25K</label>
+                    <input id="in80Dparents" max="25000" min="0" placeholder="0" step="5000" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="in80CCD">80CCD(1B) — NPS &middot; max ₹50K</label>
+                    <input id="in80CCD" max="50000" min="0" placeholder="0" step="10000" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="in80E">80E — Education Loan Interest &middot; no limit</label>
+                    <input id="in80E" min="0" placeholder="0" step="5000" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="in80EEA">80EEA — Home Loan Interest &middot; max ₹1.5L</label>
+                    <input id="in80EEA" max="150000" min="0" placeholder="0" step="10000" type="number">
+                </div>
+            </div>
+            <div class="section-label">Other Deductions <span>(Old Regime only)</span></div>
+            <div class="income-form">
+                <div class="form-group">
+                    <label for="inProfTax">Professional Tax (Annual) &middot; max ₹2,500</label>
+                    <input id="inProfTax" max="2500" min="0" placeholder="2400" step="100" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="in24b">Sec 24(b) — Home Loan Interest &middot; max ₹2L</label>
+                    <input id="in24b" max="200000" min="0" placeholder="0" step="10000" type="number">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -104,6 +142,18 @@
                 <div class="comp-row negative">
                     <span class="comp-label">Standard Deduction</span>
                     <span class="comp-value" id="old-std-ded">₹50,000</span>
+                </div>
+                <div class="comp-row negative">
+                    <span class="comp-label">Professional Tax</span>
+                    <span class="comp-value" id="old-prof-tax">₹0</span>
+                </div>
+                <div class="comp-row negative">
+                    <span class="comp-label">Sec 24(b) Home Loan Interest</span>
+                    <span class="comp-value" id="old-24b">₹0</span>
+                </div>
+                <div class="comp-row negative">
+                    <span class="comp-label">Chapter VI-A Deductions</span>
+                    <span class="comp-value" id="old-via">₹0</span>
                 </div>
                 <div class="comp-row total-row">
                     <span class="comp-label">Net Taxable Income</span>
@@ -151,6 +201,18 @@
                 <div class="comp-row negative">
                     <span class="comp-label">Standard Deduction</span>
                     <span class="comp-value" id="new-std-ded">₹75,000</span>
+                </div>
+                <div class="comp-row na">
+                    <span class="comp-label">Professional Tax</span>
+                    <span class="comp-value">N/A</span>
+                </div>
+                <div class="comp-row na">
+                    <span class="comp-label">Sec 24(b) Home Loan Interest</span>
+                    <span class="comp-value">N/A</span>
+                </div>
+                <div class="comp-row na">
+                    <span class="comp-label">Chapter VI-A Deductions</span>
+                    <span class="comp-value">N/A</span>
                 </div>
                 <div class="comp-row total-row">
                     <span class="comp-label">Net Taxable Income</span>
