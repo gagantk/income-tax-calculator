@@ -70,6 +70,24 @@
                     <input id="inOther" min="0" placeholder="970000" step="10000" type="number">
                 </div>
                 <div class="form-group">
+                    <div class="label-row">
+                        <label for="inVar">Variable Pay (Annual)</label>
+                        <span class="form-toggle" id="toggleVar">
+                            <button type="button" data-mode="pct" class="active">%</button>
+                            <button type="button" data-mode="abs">₹</button>
+                        </span>
+                    </div>
+                    <input id="inVar" max="100" min="0" placeholder="10" step="1" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="inPFPct">Provident Fund %</label>
+                    <input id="inPFPct" max="100" min="0" placeholder="12" step="1" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="inEmployerNPS">Employer NPS (Annual)</label>
+                    <input id="inEmployerNPS" min="0" placeholder="0" step="10000" type="number">
+                </div>
+                <div class="form-group">
                     <label for="inCity">City</label>
                     <select id="inCity">
                         <option selected value="Bangalore">Bangalore</option>
@@ -99,7 +117,13 @@
                     <input id="in80Dself" max="25000" min="0" placeholder="0" step="5000" type="number">
                 </div>
                 <div class="form-group">
-                    <label for="in80Dparents">80D — Parents &middot; max ₹25K</label>
+                    <div class="label-row">
+                        <label for="in80Dparents">80D — Parents <span id="hint80Dparents">&middot; max ₹25K</span></label>
+                        <span class="form-toggle" id="toggle80Dparents">
+                            <button type="button" data-age="below60" class="active">&lt;60</button>
+                            <button type="button" data-age="above60">60+</button>
+                        </span>
+                    </div>
                     <input id="in80Dparents" max="25000" min="0" placeholder="0" step="5000" type="number">
                 </div>
                 <div class="form-group">
@@ -114,6 +138,36 @@
                     <label for="in80EEA">80EEA — Home Loan Interest &middot; max ₹1.5L</label>
                     <input id="in80EEA" max="150000" min="0" placeholder="0" step="10000" type="number">
                 </div>
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="in80G">80G — Donations</label>
+                        <span class="form-toggle" id="toggle80G">
+                            <button type="button" data-rate="100" class="active">100%</button>
+                            <button type="button" data-rate="50">50%</button>
+                        </span>
+                    </div>
+                    <input id="in80G" min="0" placeholder="0" step="1000" type="number">
+                </div>
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="in80DD">80DD — Disabled Dependent <span id="hint80DD">&middot; max ₹75K</span></label>
+                        <span class="form-toggle" id="toggle80DD">
+                            <button type="button" data-level="regular" class="active">40%+</button>
+                            <button type="button" data-level="severe">80%+</button>
+                        </span>
+                    </div>
+                    <input id="in80DD" max="75000" min="0" placeholder="0" step="5000" type="number">
+                </div>
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="in80DDB">80DDB — Medical Treatment <span id="hint80DDB">&middot; max ₹40K</span></label>
+                        <span class="form-toggle" id="toggle80DDB">
+                            <button type="button" data-age="below60" class="active">&lt;60</button>
+                            <button type="button" data-age="above60">60+</button>
+                        </span>
+                    </div>
+                    <input id="in80DDB" max="40000" min="0" placeholder="0" step="5000" type="number">
+                </div>
             </div>
             <div class="section-label">Other Deductions <span>(Old Regime only)</span></div>
             <div class="income-form">
@@ -126,6 +180,37 @@
                     <input id="in24b" max="200000" min="0" placeholder="0" step="10000" type="number">
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="computed-strip">
+        <div class="strip-item">
+            <div class="strip-label">Base Pay</div>
+            <div class="strip-value" id="cBasePay">₹0</div>
+        </div>
+        <div class="strip-item">
+            <div class="strip-label">Variable</div>
+            <div class="strip-value" id="cVariable">₹0</div>
+        </div>
+        <div class="strip-item">
+            <div class="strip-label">Gross</div>
+            <div class="strip-value" id="cGross">₹0</div>
+        </div>
+        <div class="strip-item">
+            <div class="strip-label">Employee PF</div>
+            <div class="strip-value" id="cEePF">₹0</div>
+        </div>
+        <div class="strip-item">
+            <div class="strip-label">Employer PF</div>
+            <div class="strip-value" id="cErPF">₹0</div>
+        </div>
+        <div class="strip-item" id="cErNPSWrap" style="display:none;">
+            <div class="strip-label">Employer NPS</div>
+            <div class="strip-value" id="cErNPS">₹0</div>
+        </div>
+        <div class="strip-item strip-highlight">
+            <div class="strip-label">CTC</div>
+            <div class="strip-value" id="cCTC">₹0</div>
         </div>
     </div>
 
@@ -154,6 +239,10 @@
                 <div class="comp-row negative">
                     <span class="comp-label">Chapter VI-A Deductions</span>
                     <span class="comp-value" id="old-via">₹0</span>
+                </div>
+                <div class="comp-row negative" id="old-80ccd2-row" style="display:none;">
+                    <span class="comp-label">80CCD(2) Employer NPS</span>
+                    <span class="comp-value" id="old-80ccd2">₹0</span>
                 </div>
                 <div class="comp-row total-row">
                     <span class="comp-label">Net Taxable Income</span>
@@ -214,6 +303,10 @@
                     <span class="comp-label">Chapter VI-A Deductions</span>
                     <span class="comp-value">N/A</span>
                 </div>
+                <div class="comp-row negative" id="new-80ccd2-row" style="display:none;">
+                    <span class="comp-label">80CCD(2) Employer NPS</span>
+                    <span class="comp-value" id="new-80ccd2">₹0</span>
+                </div>
                 <div class="comp-row total-row">
                     <span class="comp-label">Net Taxable Income</span>
                     <span class="comp-value" id="new-taxable"></span>
@@ -265,6 +358,25 @@
                 <div class="stat-label">New Regime Tax</div>
                 <div class="stat-value" id="v-new-tax" style="color: var(--new-accent);"></div>
                 <div class="stat-sub" id="v-new-eff"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="takehome-card">
+        <div class="takehome-header">
+            <div class="takehome-title">Annual Take-Home</div>
+            <div class="takehome-sub">Gross &minus; Employee PF &minus; Professional Tax &minus; Income Tax</div>
+        </div>
+        <div class="takehome-body">
+            <div class="takehome-stat">
+                <div class="stat-label" style="color: var(--old-accent);">Old Regime</div>
+                <div class="takehome-value" id="th-old-annual"></div>
+                <div class="takehome-monthly">Monthly &middot; <span id="th-old-monthly"></span></div>
+            </div>
+            <div class="takehome-stat">
+                <div class="stat-label" style="color: var(--new-accent);">New Regime</div>
+                <div class="takehome-value" id="th-new-annual"></div>
+                <div class="takehome-monthly">Monthly &middot; <span id="th-new-monthly"></span></div>
             </div>
         </div>
     </div>

@@ -18,12 +18,15 @@ This project is built from the ground up using strictly vanilla web technologies
 
 ## ✨ Features
 
-* Core salary component inputs (Basic, HRA, Other Flexible)
+* Core salary component inputs (Basic, HRA, Other Flexible, Variable Pay with %/₹ toggle, Provident Fund %, Employer NPS)
+* **Computed Strip:** Live summary of Base Pay, Variable Pay, Gross, Employee PF, Employer PF, Employer NPS and CTC
+* **80CCD(2):** Auto Employer NPS deduction (min of contribution and 14% of Basic), applied to both regimes
 * **Exemption Engine:** Dynamic HRA computation based on rent and Metro/Non-Metro classification
 * Standard deduction computation
 * Slab-wise tax breakdown for both regimes
 * **Old & New Tax Regime:** Side-by-side comparison with a verdict highlighting which regime saves more money
-* **Chapter VI-A Deductions:** 80C, 80D (Self & Parents), 80CCD(1B) NPS, 80E education loan interest and 80EEA home loan interest, applied to the Old Regime
+* **Take-Home Card:** Annual and monthly take-home for both regimes (Gross &minus; Employee PF &minus; Professional Tax &minus; Income Tax)
+* **Chapter VI-A Deductions:** 80C, 80D (Self & Parents with under-60/60+ senior citizen toggle), 80CCD(1B) NPS, 80E education loan interest, 80EEA home loan interest, 80G donations (with 100%/50% rate toggle), 80DD disabled dependent (with 40%+/80%+ severity toggle) and 80DDB medical treatment (with under-60/60+ age toggle), applied to the Old Regime
 * Sec 24(b) home loan interest deduction (max ₹2L), applied to the Old Regime
 * Professional Tax deduction (max ₹2,500), applied to the Old Regime
 * Section 87A rebate (with marginal relief under the New Regime)

@@ -134,20 +134,35 @@ function calculate() {
     const basic = readNum('inBasic');
     const hra = readNum('inHRA');
     const otherFlex = readNum('inOther');
+    const varRaw = varMode === 'pct' ? readNum('inVar', 100) : readNum('inVar');
+    const pfPct = readNum('inPFPct', 100);
+    const employerNPS = readNum('inEmployerNPS');
     const monthlyRent = readNum('inRent');
     const city = document.getElementById('inCity').value;
 
     const sec80C = readNum('in80C', 150000);
     const sec80Dself = readNum('in80Dself', 25000);
-    const sec80Dparents = readNum('in80Dparents', 25000);
+    const parentMax = parentAge === 'above60' ? 50000 : 25000;
+    const sec80Dparents = readNum('in80Dparents', parentMax);
     const sec80CCD = readNum('in80CCD', 50000);
     const sec80E = readNum('in80E');
     const sec80EEA = readNum('in80EEA', 150000);
-    const oldViaTotal = sec80C + sec80Dself + sec80Dparents + sec80CCD + sec80E + sec80EEA;
+    const sec80Gded = readNum('in80G') * donationRate / 100;
+    const ddMax = disabilityLevel === 'severe' ? 125000 : 75000;
+    const sec80DD = readNum('in80DD', ddMax);
+    const ddbMax = ddbAge === 'above60' ? 100000 : 40000;
+    const sec80DDB = readNum('in80DDB', ddbMax);
+    const oldViaTotal = sec80C + sec80Dself + sec80Dparents + sec80CCD + sec80E + sec80EEA + sec80Gded + sec80DD + sec80DDB;
     const sec24b = readNum('in24b', 200000);
     const profTax = readNum('inProfTax', 2500);
 
-    const gross = basic + hra + otherFlex;
+    const basePay = basic + hra + otherFlex;
+    const variable = varMode === 'pct' ? basePay * varRaw / 100 : varRaw;
+    const employeePF = basic * pfPct / 100;
+    const employerPF = basic * pfPct / 100;
+    const gross = basePay + variable;
+    const ctc = gross + employerPF + employerNPS;
+    const sec80CCD2 = Math.min(employerNPS, basic * 0.14);
 
     // HRA Calculation
     const isMetro = cfg.metroCities.includes(city);
@@ -163,7 +178,7 @@ function calculate() {
     }
 
     // Old Regime
-    const oldTaxable = Math.max(0, gross - hraExempt - cfg.oldStdDed - profTax - sec24b - oldViaTotal);
+    const oldTaxable = Math.max(0, gross + employerNPS - hraExempt - cfg.oldStdDed - profTax - sec24b - oldViaTotal - sec80CCD2);
     const oldSlab = computeSlabTax(oldTaxable, cfg.oldSlabs);
     const oldRebate = computeRebate(oldTaxable, oldSlab.totalTax, cfg, 'old');
     const oldTaxAfterRebate = oldSlab.totalTax - oldRebate;
@@ -172,13 +187,41 @@ function calculate() {
     const oldTotalTax = oldTaxAfterRebate + oldSurcharge + oldCess;
 
     // New Regime
-    const newTaxable = Math.max(0, gross - cfg.newStdDed);
+    const newTaxable = Math.max(0, gross + employerNPS - cfg.newStdDed - sec80CCD2);
     const newSlab = computeSlabTax(newTaxable, cfg.newSlabs);
     const newRebate = computeRebate(newTaxable, newSlab.totalTax, cfg, 'new');
     const newTaxAfterRebate = newSlab.totalTax - newRebate;
     const newSurcharge = computeSurcharge(newTaxable, newTaxAfterRebate, cfg.newSlabs, 'new');
     const newCess = (newTaxAfterRebate + newSurcharge) * 0.04;
     const newTotalTax = newTaxAfterRebate + newSurcharge + newCess;
+
+    // Update DOM — Computed Strip
+    document.getElementById('cBasePay').textContent = fmt(basePay);
+    document.getElementById('cVariable').textContent = fmt(variable);
+    document.getElementById('cGross').textContent = fmt(gross);
+    document.getElementById('cEePF').textContent = fmt(employeePF);
+    document.getElementById('cErPF').textContent = fmt(employerPF);
+    const erNPSWrap = document.getElementById('cErNPSWrap');
+    if (employerNPS > 0) {
+        erNPSWrap.style.display = '';
+        document.getElementById('cErNPS').textContent = fmt(employerNPS);
+    } else {
+        erNPSWrap.style.display = 'none';
+    }
+    document.getElementById('cCTC').textContent = fmt(ctc);
+
+    // Update DOM — 80CCD(2) rows
+    const old80ccd2Row = document.getElementById('old-80ccd2-row');
+    const new80ccd2Row = document.getElementById('new-80ccd2-row');
+    if (sec80CCD2 > 0) {
+        old80ccd2Row.style.display = '';
+        new80ccd2Row.style.display = '';
+        document.getElementById('old-80ccd2').textContent = fmt(sec80CCD2);
+        document.getElementById('new-80ccd2').textContent = fmt(sec80CCD2);
+    } else {
+        old80ccd2Row.style.display = 'none';
+        new80ccd2Row.style.display = 'none';
+    }
 
     // Update DOM — Old
     document.getElementById('old-hra-exempt').textContent = fmt(hraExempt);
@@ -244,7 +287,105 @@ function calculate() {
     document.getElementById('v-old-eff').textContent = 'Effective: ' + (gross > 0 ? (oldTotalTax / gross * 100).toFixed(2) : '0') + '%';
     document.getElementById('v-new-tax').textContent = fmt(newTotalTax);
     document.getElementById('v-new-eff').textContent = 'Effective: ' + (gross > 0 ? (newTotalTax / gross * 100).toFixed(2) : '0') + '%';
+
+    // Take-Home
+    const oldTakeHome = gross - employeePF - profTax - oldTotalTax;
+    const newTakeHome = gross - employeePF - profTax - newTotalTax;
+    document.getElementById('th-old-annual').textContent = fmt(oldTakeHome);
+    document.getElementById('th-old-monthly').textContent = fmt(oldTakeHome / 12);
+    document.getElementById('th-new-annual').textContent = fmt(newTakeHome);
+    document.getElementById('th-new-monthly').textContent = fmt(newTakeHome / 12);
 }
+
+let varMode = 'pct';
+let parentAge = 'below60';
+let donationRate = 100;
+let disabilityLevel = 'regular';
+let ddbAge = 'below60';
+
+document.getElementById('toggleVar').addEventListener('click', function (e) {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const mode = btn.getAttribute('data-mode');
+    if (mode === varMode) return;
+    varMode = mode;
+    this.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const input = document.getElementById('inVar');
+    if (mode === 'pct') {
+        input.placeholder = '10';
+        input.step = '1';
+        input.max = 100;
+    } else {
+        input.placeholder = '200000';
+        input.step = '10000';
+        input.removeAttribute('max');
+    }
+    input.value = '';
+    calculate();
+});
+
+document.getElementById('toggle80Dparents').addEventListener('click', function (e) {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const age = btn.getAttribute('data-age');
+    if (age === parentAge) return;
+    parentAge = age;
+    this.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const input = document.getElementById('in80Dparents');
+    const isSenior = age === 'above60';
+    const max = isSenior ? 50000 : 25000;
+    input.max = max;
+    document.getElementById('hint80Dparents').textContent = isSenior ? '· max ₹50K' : '· max ₹25K';
+    if (parseFloat(input.value) > max) input.value = max;
+    calculate();
+});
+
+document.getElementById('toggle80G').addEventListener('click', function (e) {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const rate = parseInt(btn.getAttribute('data-rate'), 10);
+    if (rate === donationRate) return;
+    donationRate = rate;
+    this.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    calculate();
+});
+
+document.getElementById('toggle80DD').addEventListener('click', function (e) {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const level = btn.getAttribute('data-level');
+    if (level === disabilityLevel) return;
+    disabilityLevel = level;
+    this.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const input = document.getElementById('in80DD');
+    const isSevere = level === 'severe';
+    const max = isSevere ? 125000 : 75000;
+    input.max = max;
+    document.getElementById('hint80DD').textContent = isSevere ? '· max ₹1.25L' : '· max ₹75K';
+    if (parseFloat(input.value) > max) input.value = max;
+    calculate();
+});
+
+document.getElementById('toggle80DDB').addEventListener('click', function (e) {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const age = btn.getAttribute('data-age');
+    if (age === ddbAge) return;
+    ddbAge = age;
+    this.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const input = document.getElementById('in80DDB');
+    const isSenior = age === 'above60';
+    const max = isSenior ? 100000 : 40000;
+    input.max = max;
+    document.getElementById('hint80DDB').textContent = isSenior ? '· max ₹1L' : '· max ₹40K';
+    if (parseFloat(input.value) > max) input.value = max;
+    calculate();
+});
 
 document.querySelectorAll('input, select').forEach(el => {
     el.addEventListener('input', calculate);

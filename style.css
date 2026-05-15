@@ -252,6 +252,45 @@ main {
     text-transform: uppercase;
 }
 
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-toggle {
+    display: inline-flex;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.form-toggle button {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 0.62rem;
+    font-weight: 600;
+    padding: 0.1rem 0.55rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.form-toggle button.active {
+    background: var(--text);
+    color: var(--card);
+}
+
+.form-toggle button:not(.active):hover {
+    color: var(--text);
+}
+
 .form-group input, .form-group select {
     padding: 0.45rem 0.65rem;
     border: 1px solid var(--border);
@@ -265,6 +304,60 @@ main {
     color: var(--text-light);
     opacity: 0.7;
     font-weight: 300;
+}
+
+.computed-strip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem 2rem;
+    align-items: center;
+}
+
+.strip-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.strip-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.strip-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+}
+
+.strip-item.strip-highlight {
+    margin-left: auto;
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--border);
+}
+
+.strip-item.strip-highlight .strip-value {
+    color: var(--new-accent);
+    font-size: 1.15rem;
+}
+
+@media (max-width: 640px) {
+    .strip-item.strip-highlight {
+        margin-left: 0;
+        padding-left: 0;
+        border-left: none;
+    }
 }
 
 .regime-grid {
@@ -454,4 +547,60 @@ main {
 .stat-sub {
     font-size: 0.76rem;
     color: var(--text-light);
+}
+
+.takehome-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.takehome-header {
+    padding: 0.9rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+}
+
+.takehome-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.takehome-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+.takehome-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.takehome-stat {
+    padding: 1rem 1.5rem;
+    text-align: center;
+}
+
+.takehome-stat:first-child {
+    border-right: 1px solid var(--border);
+}
+
+.takehome-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    margin-top: 0.25rem;
+}
+
+.takehome-monthly {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+    font-variant-numeric: tabular-nums;
 }
