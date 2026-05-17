@@ -19,6 +19,8 @@ This project is built from the ground up using strictly vanilla web technologies
 ## ✨ Features
 
 * Core salary component inputs (Basic, HRA, Other Flexible, Variable Pay with %/₹ toggle, Provident Fund %, Employer NPS)
+* **Other Income:** Additional Income (bonus, RSU, etc. — flows into Gross) and Savings Account Interest with auto 80TTA deduction (min interest, ₹10K) under Old Regime
+* **Exempt Allowances:** LTA, Fuel/Conveyance allowances (capped at Other Flexible), applied to the Old Regime only
 * **Computed Strip:** Live summary of Base Pay, Variable Pay, Gross, Employee PF, Employer PF, Employer NPS and CTC
 * **80CCD(2):** Auto Employer NPS deduction (min of contribution and 14% of Basic), applied to both regimes
 * **Exemption Engine:** Dynamic HRA computation based on rent and Metro/Non-Metro classification

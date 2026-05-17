@@ -106,6 +106,17 @@
                     <input id="inRent" min="0" placeholder="0" step="1000" type="number">
                 </div>
             </div>
+            <div class="section-label">Other Income <span>(optional)</span></div>
+            <div class="income-form">
+                <div class="form-group">
+                    <label for="inAddlIncome">Additional Income (Annual)</label>
+                    <input id="inAddlIncome" min="0" placeholder="Bonus, RSU, other" step="10000" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="inSavingsInt">Savings Account Interest (Annual)</label>
+                    <input id="inSavingsInt" min="0" placeholder="0" step="1000" type="number">
+                </div>
+            </div>
             <div class="section-label">Chapter VI-A Deductions <span>(Old Regime only)</span></div>
             <div class="income-form">
                 <div class="form-group">
@@ -169,8 +180,12 @@
                     <input id="in80DDB" max="40000" min="0" placeholder="0" step="5000" type="number">
                 </div>
             </div>
-            <div class="section-label">Other Deductions <span>(Old Regime only)</span></div>
+            <div class="section-label">Exemptions &amp; Other Deductions <span>(Old Regime only)</span></div>
             <div class="income-form">
+                <div class="form-group">
+                    <label for="inExemptAllow">Exempt Allowances &middot; LTA, Fuel (capped at Other Flex)</label>
+                    <input id="inExemptAllow" min="0" placeholder="0" step="5000" type="number">
+                </div>
                 <div class="form-group">
                     <label for="inProfTax">Professional Tax (Annual) &middot; max ₹2,500</label>
                     <input id="inProfTax" max="2500" min="0" placeholder="2400" step="100" type="number">
@@ -192,6 +207,10 @@
             <div class="strip-label">Variable</div>
             <div class="strip-value" id="cVariable">₹0</div>
         </div>
+        <div class="strip-item" id="cAddlWrap" style="display:none;">
+            <div class="strip-label">Additional Income</div>
+            <div class="strip-value" id="cAddlIncome">₹0</div>
+        </div>
         <div class="strip-item">
             <div class="strip-label">Gross</div>
             <div class="strip-value" id="cGross">₹0</div>
@@ -208,6 +227,10 @@
             <div class="strip-label">Employer NPS</div>
             <div class="strip-value" id="cErNPS">₹0</div>
         </div>
+        <div class="strip-item" id="cSavIntWrap" style="display:none;">
+            <div class="strip-label">Savings Interest</div>
+            <div class="strip-value" id="cSavInt">₹0</div>
+        </div>
         <div class="strip-item strip-highlight">
             <div class="strip-label">CTC</div>
             <div class="strip-value" id="cCTC">₹0</div>
@@ -220,9 +243,17 @@
                 <h3>Old Tax Regime</h3>
             </div>
             <div class="regime-body">
+                <div class="comp-row" id="old-savings-int-row" style="display:none;">
+                    <span class="comp-label">Savings Account Interest</span>
+                    <span class="comp-value" id="old-savings-int">₹0</span>
+                </div>
                 <div class="comp-row negative">
                     <span class="comp-label">HRA Exemption</span>
                     <span class="comp-value" id="old-hra-exempt">₹0</span>
+                </div>
+                <div class="comp-row negative">
+                    <span class="comp-label">Exempt Allowances</span>
+                    <span class="comp-value" id="old-exempt-allow">₹0</span>
                 </div>
                 <div class="comp-row negative">
                     <span class="comp-label">Standard Deduction</span>
@@ -243,6 +274,10 @@
                 <div class="comp-row negative" id="old-80ccd2-row" style="display:none;">
                     <span class="comp-label">80CCD(2) Employer NPS</span>
                     <span class="comp-value" id="old-80ccd2">₹0</span>
+                </div>
+                <div class="comp-row negative" id="old-80tta-row" style="display:none;">
+                    <span class="comp-label">80TTA Savings Interest</span>
+                    <span class="comp-value" id="old-80tta">₹0</span>
                 </div>
                 <div class="comp-row total-row">
                     <span class="comp-label">Net Taxable Income</span>
@@ -283,8 +318,16 @@
                 <h3>New Tax Regime</h3>
             </div>
             <div class="regime-body">
+                <div class="comp-row" id="new-savings-int-row" style="display:none;">
+                    <span class="comp-label">Savings Account Interest</span>
+                    <span class="comp-value" id="new-savings-int">₹0</span>
+                </div>
                 <div class="comp-row na">
                     <span class="comp-label">HRA Exemption</span>
+                    <span class="comp-value">N/A</span>
+                </div>
+                <div class="comp-row na">
+                    <span class="comp-label">Exempt Allowances</span>
                     <span class="comp-value">N/A</span>
                 </div>
                 <div class="comp-row negative">

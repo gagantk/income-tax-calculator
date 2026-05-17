@@ -137,9 +137,12 @@ function calculate() {
     const varRaw = varMode === 'pct' ? readNum('inVar', 100) : readNum('inVar');
     const pfPct = readNum('inPFPct', 100);
     const employerNPS = readNum('inEmployerNPS');
+    const addlIncome = readNum('inAddlIncome');
+    const savingsInt = readNum('inSavingsInt');
     const monthlyRent = readNum('inRent');
     const city = document.getElementById('inCity').value;
 
+    const exemptAllow = readNum('inExemptAllow', otherFlex);
     const sec80C = readNum('in80C', 150000);
     const sec80Dself = readNum('in80Dself', 25000);
     const parentMax = parentAge === 'above60' ? 50000 : 25000;
@@ -160,9 +163,10 @@ function calculate() {
     const variable = varMode === 'pct' ? basePay * varRaw / 100 : varRaw;
     const employeePF = basic * pfPct / 100;
     const employerPF = basic * pfPct / 100;
-    const gross = basePay + variable;
+    const gross = basePay + variable + addlIncome;
     const ctc = gross + employerPF + employerNPS;
     const sec80CCD2 = Math.min(employerNPS, basic * 0.14);
+    const sec80TTA = Math.min(savingsInt, 10000);
 
     // HRA Calculation
     const isMetro = cfg.metroCities.includes(city);
@@ -178,7 +182,7 @@ function calculate() {
     }
 
     // Old Regime
-    const oldTaxable = Math.max(0, gross + employerNPS - hraExempt - cfg.oldStdDed - profTax - sec24b - oldViaTotal - sec80CCD2);
+    const oldTaxable = Math.max(0, gross + employerNPS + savingsInt - hraExempt - exemptAllow - cfg.oldStdDed - profTax - sec24b - oldViaTotal - sec80CCD2 - sec80TTA);
     const oldSlab = computeSlabTax(oldTaxable, cfg.oldSlabs);
     const oldRebate = computeRebate(oldTaxable, oldSlab.totalTax, cfg, 'old');
     const oldTaxAfterRebate = oldSlab.totalTax - oldRebate;
@@ -187,7 +191,7 @@ function calculate() {
     const oldTotalTax = oldTaxAfterRebate + oldSurcharge + oldCess;
 
     // New Regime
-    const newTaxable = Math.max(0, gross + employerNPS - cfg.newStdDed - sec80CCD2);
+    const newTaxable = Math.max(0, gross + employerNPS + savingsInt - cfg.newStdDed - sec80CCD2);
     const newSlab = computeSlabTax(newTaxable, cfg.newSlabs);
     const newRebate = computeRebate(newTaxable, newSlab.totalTax, cfg, 'new');
     const newTaxAfterRebate = newSlab.totalTax - newRebate;
@@ -201,12 +205,26 @@ function calculate() {
     document.getElementById('cGross').textContent = fmt(gross);
     document.getElementById('cEePF').textContent = fmt(employeePF);
     document.getElementById('cErPF').textContent = fmt(employerPF);
+    const addlWrap = document.getElementById('cAddlWrap');
+    if (addlIncome > 0) {
+        addlWrap.style.display = '';
+        document.getElementById('cAddlIncome').textContent = fmt(addlIncome);
+    } else {
+        addlWrap.style.display = 'none';
+    }
     const erNPSWrap = document.getElementById('cErNPSWrap');
     if (employerNPS > 0) {
         erNPSWrap.style.display = '';
         document.getElementById('cErNPS').textContent = fmt(employerNPS);
     } else {
         erNPSWrap.style.display = 'none';
+    }
+    const savIntWrap = document.getElementById('cSavIntWrap');
+    if (savingsInt > 0) {
+        savIntWrap.style.display = '';
+        document.getElementById('cSavInt').textContent = fmt(savingsInt);
+    } else {
+        savIntWrap.style.display = 'none';
     }
     document.getElementById('cCTC').textContent = fmt(ctc);
 
@@ -223,8 +241,26 @@ function calculate() {
         new80ccd2Row.style.display = 'none';
     }
 
+    // Update DOM — Savings Interest income rows
+    const oldSavIntRow = document.getElementById('old-savings-int-row');
+    const newSavIntRow = document.getElementById('new-savings-int-row');
+    const old80ttaRow = document.getElementById('old-80tta-row');
+    if (savingsInt > 0) {
+        oldSavIntRow.style.display = '';
+        newSavIntRow.style.display = '';
+        document.getElementById('old-savings-int').textContent = fmt(savingsInt);
+        document.getElementById('new-savings-int').textContent = fmt(savingsInt);
+        old80ttaRow.style.display = '';
+        document.getElementById('old-80tta').textContent = fmt(sec80TTA);
+    } else {
+        oldSavIntRow.style.display = 'none';
+        newSavIntRow.style.display = 'none';
+        old80ttaRow.style.display = 'none';
+    }
+
     // Update DOM — Old
     document.getElementById('old-hra-exempt').textContent = fmt(hraExempt);
+    document.getElementById('old-exempt-allow').textContent = fmt(exemptAllow);
     document.getElementById('old-std-ded').textContent = fmt(cfg.oldStdDed);
     document.getElementById('old-prof-tax').textContent = fmt(profTax);
     document.getElementById('old-24b').textContent = fmt(sec24b);
