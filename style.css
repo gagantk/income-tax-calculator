@@ -631,6 +631,34 @@ main {
     border-right: 1px solid var(--border);
 }
 
+.takehome-breakdown {
+    margin: 0.75rem 0 0.6rem;
+    text-align: left;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--text);
+}
+
+.th-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.78rem;
+    padding: 0.25rem 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.th-row span:first-child {
+    color: var(--text-muted);
+}
+
+.th-row.negative span:last-child {
+    color: var(--green);
+}
+
+.th-row.negative span:last-child::before {
+    content: "− ";
+}
+
 .takehome-value {
     font-size: 1.5rem;
     font-weight: 700;
@@ -644,4 +672,14 @@ main {
     color: var(--text-muted);
     margin-top: 0.2rem;
     font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 540px) {
+    .takehome-body {
+        grid-template-columns: 1fr;
+    }
+    .takehome-stat:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
 }

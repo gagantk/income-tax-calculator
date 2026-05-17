@@ -332,8 +332,16 @@ function calculate() {
     // Take-Home
     const oldTakeHome = gross - employeePF - profTax - oldTotalTax;
     const newTakeHome = gross - employeePF - profTax - newTotalTax;
+    document.getElementById('th-old-gross').textContent = fmt(gross);
+    document.getElementById('th-old-eepf').textContent = fmt(employeePF);
+    document.getElementById('th-old-pt').textContent = fmt(profTax);
+    document.getElementById('th-old-tax').textContent = fmt(oldTotalTax);
     document.getElementById('th-old-annual').textContent = fmt(oldTakeHome);
     document.getElementById('th-old-monthly').textContent = fmt(oldTakeHome / 12);
+    document.getElementById('th-new-gross').textContent = fmt(gross);
+    document.getElementById('th-new-eepf').textContent = fmt(employeePF);
+    document.getElementById('th-new-pt').textContent = fmt(profTax);
+    document.getElementById('th-new-tax').textContent = fmt(newTotalTax);
     document.getElementById('th-new-annual').textContent = fmt(newTakeHome);
     document.getElementById('th-new-monthly').textContent = fmt(newTakeHome / 12);
 }
