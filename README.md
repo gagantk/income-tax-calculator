@@ -23,9 +23,10 @@ This project is built from the ground up using strictly vanilla web technologies
 * **Exempt Allowances:** LTA, Fuel/Conveyance allowances (capped at Other Flexible), applied to the Old Regime only
 * **Computed Strip:** Live summary of Base Pay, Variable Pay, Gross, Employee PF, Employer PF, Employer NPS and CTC
 * **80CCD(2):** Auto Employer NPS deduction (min of contribution and 14% of Basic), applied to both regimes
-* **Exemption Engine:** Dynamic HRA computation based on rent and Metro/Non-Metro classification
+* **Exemption Engine:** Dynamic HRA computation based on rent and Metro/Non-Metro classification (with a live badge next to the City selector)
 * Standard deduction computation
 * Slab-wise tax breakdown for both regimes
+* **Effective Tax Rate:** Displayed within each regime card (total tax as a percentage of gross)
 * **Old & New Tax Regime:** Side-by-side comparison with a verdict highlighting which regime saves more money
 * **Take-Home Card:** Annual and monthly take-home for both regimes (Gross &minus; Employee PF &minus; Professional Tax &minus; Income Tax)
 * **Chapter VI-A Deductions:** 80C, 80D (Self & Parents with under-60/60+ senior citizen toggle), 80CCD(1B) NPS, 80E education loan interest, 80EEA home loan interest, 80G donations (with 100%/50% rate toggle), 80DD disabled dependent (with 40%+/80%+ severity toggle) and 80DDB medical treatment (with under-60/60+ age toggle), applied to the Old Regime

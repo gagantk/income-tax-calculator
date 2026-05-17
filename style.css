@@ -291,6 +291,29 @@ main {
     color: var(--text);
 }
 
+.city-badge {
+    font-size: 0.62rem;
+    font-weight: 600;
+    padding: 0.12rem 0.55rem;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+    border: 1px solid transparent;
+}
+
+.city-badge.metro {
+    background: var(--new-bg);
+    color: var(--new-accent);
+    border-color: var(--new-border);
+}
+
+.city-badge.non-metro {
+    background: var(--old-bg);
+    color: var(--old-accent);
+    border-color: var(--old-border);
+}
+
 .form-group input, .form-group select {
     padding: 0.45rem 0.65rem;
     border: 1px solid var(--border);
@@ -427,6 +450,24 @@ main {
 
 .comp-row.negative .comp-value::before {
     content: "− ";
+}
+
+.comp-row.eff-rate {
+    border-bottom: none;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 0.25rem;
+}
+
+.comp-row.eff-rate .comp-value {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.eff-rate-sub {
+    color: var(--text-light);
+    font-weight: 400;
 }
 
 .slab-table {

@@ -170,6 +170,9 @@ function calculate() {
 
     // HRA Calculation
     const isMetro = cfg.metroCities.includes(city);
+    const cityBadge = document.getElementById('cityBadge');
+    cityBadge.textContent = isMetro ? 'Metro' : 'Non-Metro';
+    cityBadge.className = 'city-badge ' + (isMetro ? 'metro' : 'non-metro');
     const annualRent = monthlyRent * 12;
     let hraExempt = 0;
 
@@ -281,6 +284,7 @@ function calculate() {
     document.getElementById('old-surcharge').textContent = fmt(oldSurcharge);
     document.getElementById('old-cess').textContent = fmt(oldCess);
     document.getElementById('old-total-tax').textContent = fmt(oldTotalTax);
+    document.getElementById('old-eff-rate').textContent = (gross > 0 ? (oldTotalTax / gross * 100).toFixed(2) : '0.00') + '%';
 
     // Update DOM — New
     document.getElementById('new-std-ded').textContent = fmt(cfg.newStdDed);
@@ -300,6 +304,7 @@ function calculate() {
     document.getElementById('new-surcharge').textContent = fmt(newSurcharge);
     document.getElementById('new-cess').textContent = fmt(newCess);
     document.getElementById('new-total-tax').textContent = fmt(newTotalTax);
+    document.getElementById('new-eff-rate').textContent = (gross > 0 ? (newTotalTax / gross * 100).toFixed(2) : '0.00') + '%';
 
     // Verdict
     const diff = Math.abs(oldTotalTax - newTotalTax);
